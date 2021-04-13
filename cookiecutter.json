@@ -1,4 +1,6 @@
 {
     "project_name": "Name of the project",
+    "lambda_name": "hello_world",
+    "service_name": "hello",
     "include_safe_deployment": "n"
 }

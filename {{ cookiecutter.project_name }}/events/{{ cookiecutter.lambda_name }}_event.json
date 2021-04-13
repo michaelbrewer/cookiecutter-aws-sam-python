@@ -1,7 +1,7 @@
 {
   "body": "hello",
-  "resource": "/hello",
-  "path": "/hello",
+  "resource": "/{{ cookiecutter.service_name }}",
+  "path": "/{{ cookiecutter.service_name }}",
   "httpMethod": "POST",
   "isBase64Encoded": true,
   "queryStringParameters": {
@@ -13,7 +13,7 @@
     ]
   },
   "pathParameters": {
-    "hello": "/hello"
+    "{{ cookiecutter.service_name }}": "/{{ cookiecutter.service_name }}"
   },
   "stageVariables": {
     "baz": "qux"
@@ -114,8 +114,8 @@
       "userAgent": "Custom User Agent String",
       "user": null
     },
-    "path": "/Prod/hello",
-    "resourcePath": "/hello",
+    "path": "/Prod/{{ cookiecutter.service_name }}",
+    "resourcePath": "/{{ cookiecutter.service_name }}",
     "httpMethod": "POST",
     "apiId": "1234567890",
     "protocol": "HTTP/1.1"

@@ -20,20 +20,20 @@ Globals:
                 POWERTOOLS_LOGGER_SAMPLE_RATE: 0.1
                 POWERTOOLS_LOGGER_LOG_EVENT: true
                 POWERTOOLS_METRICS_NAMESPACE: MyServerlessApplication
-                POWERTOOLS_SERVICE_NAME: hello
+                POWERTOOLS_SERVICE_NAME: {{ cookiecutter.service_name }}
 
 Resources:
-    HelloWorldFunction:
+    {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}Function:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
             Handler: app.lambda_handler
-            CodeUri: hello_world
-            Description: Hello World function
+            CodeUri: {{ cookiecutter.lambda_name }}
+            Description: {{ cookiecutter.lambda_name|replace('_', ' ')|title() }} function
             Events:
                 CatchAll:
                     Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
                     Properties:
-                        Path: /hello
+                        Path: /{{ cookiecutter.service_name }}
                         Method: GET
             # Policies: # Example inline policy
             #     - Version: "2012-10-17"
@@ -48,10 +48,10 @@ Resources:
                     PARAM1: VALUE
             Tags:
                 SOLUTION: MyServerlessApplication
-                SOLUTION_MODULE: MyHelloWorldFunction
+                SOLUTION_MODULE: My{{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}Function
 
     # Sample policy to add additional permissions to your Lambda
-    HelloWorldFunctionAdditionalPermission:
+    {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}FunctionAdditionalPermission:
         Type: "AWS::IAM::Policy"
         Properties:
             PolicyName: "root"
@@ -63,14 +63,14 @@ Resources:
                         Action: "ssm:GetParameters"
                         Resource: "*"
             Roles:
-                - !Ref HelloWorldFunctionRole # Sample policy to demonstrate Implicit IAM Role created with SAM
+                - !Ref {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}FunctionRole # Sample policy to demonstrate Implicit IAM Role created with SAM
 
 Outputs:
-    HelloWorldApigwURL:
-      Description: "API Gateway endpoint URL for Prod environment for Hello World Function"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello"
+    {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}ApigwURL:
+      Description: "API Gateway endpoint URL for Prod environment for {{ cookiecutter.lambda_name|replace('_', ' ')|title() }} Function"
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/{{ cookiecutter.service_name }}"
 
-    HelloWorldFunction:
-      Description: "Hello World Lambda Function ARN"
-      Value: !GetAtt HelloWorldFunction.Arn
+    {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}Function:
+      Description: "{{ cookiecutter.lambda_name|replace('_', ' ')|title() }} Lambda Function ARN"
+      Value: !GetAtt {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}Function.Arn
 

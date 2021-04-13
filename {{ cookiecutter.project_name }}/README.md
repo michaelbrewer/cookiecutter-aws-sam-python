@@ -2,7 +2,7 @@
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes [Lambda Powertools for operational best practices](https://github.com/awslabs/aws-lambda-powertools-python), and the following files and folders.
 
-- **`hello_world`** - Code for the application's Lambda function.
+- **`{{ cookiecutter.lambda_name }}`** - Code for the application's Lambda function.
 - **`events`** - Invocation events that you can use to invoke the function.
 - **`tests`** - Unit tests for the application code. 
 - **`template.yaml`** - A template that defines the application's AWS resources.
@@ -45,7 +45,7 @@ Whenever you change your application code, you'll have to run build command:
 {{ cookiecutter.project_name }}$ make build
 ```
 
-The SAM CLI installs dependencies defined in `hello_world/requirements.txt`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
+The SAM CLI installs dependencies defined in `{{ cookiecutter.lambda_name }}/requirements.txt`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
 
 Test a single function by invoking it directly with a test event:
 
@@ -59,17 +59,17 @@ The SAM CLI can also emulate your application's API. Use the `make run` to run t
 
 ```bash
 {{ cookiecutter.project_name }}$ make run
-{{ cookiecutter.project_name }}$ curl http://localhost:3000/hello
+{{ cookiecutter.project_name }}$ curl http://localhost:3000/{{ cookiecutter.service_name }}
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
 
 ```yaml
       Events:
-        HelloWorld:
+        {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}:
           Type: Api
           Properties:
-            Path: /hello
+            Path: /{{ cookiecutter.service_name }}
             Method: get
 ```
 
@@ -80,7 +80,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-{{ cookiecutter.project_name }}$ sam logs -n HelloWorldFunction --stack-name <Name-of-your-deployed-stack> --tail
+{{ cookiecutter.project_name }}$ sam logs -n {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}Function --stack-name <Name-of-your-deployed-stack> --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -126,7 +126,7 @@ We included a `Makefile` for your convenience - You can find all commands you ca
 
 * **`make build`**: `sam build --use-container`
 * **`make deploy.guided`**: `sam deploy --guided`
-* **`make invoke`**: `sam local invoke HelloWorldFunction --event events/hello_world_event.json`
+* **`make invoke`**: `sam local invoke {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}Function --event events/{{ cookiecutter.lambda_name }}_event.json`
 * **`make run`**: `sam local start-api`
 
 ## Sync project with function dependencies
@@ -134,5 +134,5 @@ We included a `Makefile` for your convenience - You can find all commands you ca
 Pipenv takes care of isolating dev dependencies and app dependencies. As SAM CLI requires a `requirements.txt` file, you'd need to generate one if new app dependencies have been added:
 
 ```bash
-{{ cookiecutter.project_name }}$ pipenv lock -r > hello_world/requirements.txt
+{{ cookiecutter.project_name }}$ pipenv lock -r > {{ cookiecutter.lambda_name }}/requirements.txt
 ```

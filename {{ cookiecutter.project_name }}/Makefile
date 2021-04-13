@@ -43,7 +43,7 @@ deploy: ##=> Deploy app using previously saved SAM CLI configuration
 	sam deploy
 
 invoke: ##=> Run SAM Local function with a given event payload
-	@sam local invoke HelloWorldFunction --event events/hello_world_event.json
+	@sam local invoke {{ cookiecutter.lambda_name|replace('_', ' ')|title()|replace(' ', '') }}Function --event events/{{ cookiecutter.lambda_name }}_event.json
 
 run: ##=> Run SAM Local API GW and can optionally run new containers connected to a defined network
 	@test -z ${NETWORK} \
